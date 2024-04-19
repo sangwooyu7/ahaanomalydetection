@@ -62,6 +62,15 @@ plt.ylabel('Price')
 plt.xticks(rotation=45)  # Rotate category labels for better readability
 plt.show()
 
+#Box Plots by Category
+plt.figure(figsize=(14, 7))
+sns.boxplot(x='Category', y='Time_Since_Last_Scan', data=df)
+plt.title('Box Plot of Times by Category')
+plt.xlabel('Category')
+plt.ylabel('Time Since Last Scan')
+plt.xticks(rotation=45)  # Rotate category labels for better readability
+plt.show()
+
 # Converting all columns to numeric for correlation calculation
 df_numeric = df.apply(pd.to_numeric, errors='coerce')
 

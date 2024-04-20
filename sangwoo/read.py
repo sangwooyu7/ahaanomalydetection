@@ -1,18 +1,17 @@
 import csv
-from scan import Scan
 from receipt import Receipt
+from scan import Scan  
 
-def read_csv(file_path):
+def read_receipts(file_path):
     receipts = []
-    with open(file_path, newline='') as csvfile:
-        reader = csv.reader(csvfile)
+    with open(file_path, 'r') as file:
+        reader = csv.reader(file, delimiter=',')
         for row in reader:
             receipt = Receipt()
-            scans_in_row = row[0].split(',')
-            for scan_info in scans_in_row:
-                department, time, price = scan_info.split()
-                scan = Scan(department, int(time), float(price))
-                receipt.add_scan(scan)
+            for scan_data in [row.strip().split() for row in row]:
+                if len(scan_data) == 3:
+                    department, time, price = scan_data
+                    scan = Scan(int(department), int(time), float(price))
+                    receipt.add_scan(scan)
             receipts.append(receipt)
     return receipts
-

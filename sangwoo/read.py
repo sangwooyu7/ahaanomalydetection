@@ -1,4 +1,5 @@
 import csv
+import random
 from receipt import Receipt
 from scan import Scan  
 
@@ -15,3 +16,13 @@ def read_receipts(file_path):
                     receipt.add_scan(scan)
             receipts.append(receipt)
     return receipts
+
+def sample_receipts(receipts, sample_rate=0.1, seed=None):
+    if seed is not None:
+        random.seed(seed)
+    
+    sampled_receipts = []
+    for receipt in receipts:
+        if random.random() < sample_rate:
+            sampled_receipts.append(receipt)
+    return sampled_receipts

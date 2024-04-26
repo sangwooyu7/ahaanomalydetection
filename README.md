@@ -16,8 +16,8 @@ Reminder: Code is NOT graded. Put effort into making presentations and reports n
 
 - Data analysis
   - If we do ML
-    - Think about features
-    - Experiment with features
+    - Think about features (see below) 
+    - Experiment with features (9 trials left as of 26th April) 
     - Choose the most informative features using dimensionality reduction
       - PCA
     - Evaluating model performance only possible in Checker

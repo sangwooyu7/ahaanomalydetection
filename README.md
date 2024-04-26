@@ -1,6 +1,30 @@
 # Welcome to LAR3S consulting
 We undertake supermarket self-checkout anomaly detection.
 
+# Tasks to be done 
+Reminder: Code is NOT graded. Put effort into making presentations and reports nice (presentation 15%/reports 25%) 
+- Make an introduction
+  - Problem statement
+    - What steps should we take to address the fraud problem?
+    - What is the impact?
+    - Should we consider an AI-based system?
+- EDA
+  - Choose interesting graphics for AHA managers
+  - Describe the usual customer
+  - Can you identify customer types? (Missing)
+  - Describe abnormalities
+
+- If we do ML
+  - Think about features
+  - Experiment with features
+  - Choose the most informative features using dimensionality reduction
+    - PCA
+  - Evaluating model performance only possible in Checker
+  - Make sure about 15% of input is marked sus
+- Beyond ML
+  - Research some other methods
+  - Some critical thinking or academic research needed how to solve this problem
+
 # Objective
 We want to identify fraudulent transactions. 
 We can reasonably assume that ~±15% are fraudulent.

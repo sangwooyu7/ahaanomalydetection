@@ -67,6 +67,12 @@ We can try K means, DBSCAN, hierarchical clustering, and so on.
 ## What will be the useful splits/clusters? 
 We don't know, but we can test our splits on Checker. Again, our goal is to identify top 150 per 1000, not top 10. So very specific clusters may not be that useful in our case. 
 
+## What were the clusters we tried but did not beat baseline?
+- 1st try: 
+- 2nd
+- 3rd
+- 4th..
+
 ## Should we include many features for splits/clusters? 
 Yes and no. We need the suspicious group to have at least 150 observations so we can run it on checker, so 50/50 split would not be very useful.
 If we include too many features, we might be overfitting. 

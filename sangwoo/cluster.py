@@ -18,16 +18,18 @@ sample = sample_receipts(receipts, 0.05, set_seed)
 features = extract_features(sample)
 X = np.array(features)
 
-pca = PCA(n_components=3)  # Choose the number of components
+pca = PCA(n_components=5)  # Choose the number of components
 X_pca = pca.fit_transform(X)
 components = pca.components_
-original_features = [# 'total_time',
-                     # 'total_cost',
+original_features = ['total_time',
+                     'total_cost',
                      'num_scans',
                      'time_variance',
                      'dept_change_proportion',
                      'back_and_forth',
-                     'time_cost_ratio']
+                     'time_cost_ratio',
+                     # 'in_top_subsets'
+                    ]
 
 for i, component in enumerate(components):
     print(f"Component {i+1}:")
@@ -45,7 +47,7 @@ plt.xlabel('Number of Clusters')
 plt.ylabel('Inertia')
 plt.show()
 
-optimal_k = 5
+optimal_k = 3
 
 # Silhouette analysis
 silhouette_scores = []

@@ -80,7 +80,7 @@ We first need to find some clustering model that would give us reasonably good f
 ## What are some interesting features we can consider? 
 Here are some suggestions, but the more important consideration is that our cluster can be ONLY evaluated through checker, and how good a feature sounds has less to do with actually checking its performance. The most interesting feature might not give us enough fraudulent receipts, which then we cannot really test our hypotheses. 
 
- - Time-based
+- Time-based
   - Total duration of the visit (difference between the first and last scan times)
   - Average time between scans
   - Variance or standard deviation of time between scans

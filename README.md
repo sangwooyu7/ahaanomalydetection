@@ -33,11 +33,14 @@ Here are some suggestions.
 
 ## Should we use machine learning? 
 Yes we can, then the task becomes unsupervised classification. 
-Why unsupervised? There is no true label provided
-Why classification? Our output per receipt should be classified fraud/or not. 
+  - Why unsupervised? There is no true label provided
+  - Why classification? Our output per receipt should be classified fraud/or not.
+
+## What are some good unsupervised classification algorithms?
+We can try K means, DBSCAN, hierarchical clustering, and so on. 
 
 ### What will be the useful splits/clusters? 
-We don't know, but we can test our splits on checker. 
+We don't know, but we can test our splits on Checker. Again, our goal is to identify top 150, not top 10. So very specific clusters may not be that useful in our case. 
 
 ### Should we include many splits/clusters? 
 Yes and no. We need the suspicious group to have at least 150 observations so we can run it on checker, so 50/50 split would not be very useful.

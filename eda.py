@@ -1,9 +1,10 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
 # Path to your CSV file
-csv_file_path = '/Users/alexandraholikova/Downloads/supermarket.csv'
+csv_file_path = '/Users/alexandraholikova/Downloads/supermarket_fixed2.csv'
 
 # Placeholder list to collect all the parsed data
 data = []
@@ -19,6 +20,9 @@ with open(csv_file_path, 'r') as file:
             details = product.strip().split()  # Assuming space separation of details
             if len(details) == 3:  # Make sure there are exactly three details
                 category, time_since_last_scan, price = details
+                category = int(category)
+                time_since_last_scan = int(time_since_last_scan)  # Convert time to integer
+                price = float(price)  # Convert price to float
                 data.append([row_index + 1, category, time_since_last_scan, price])
 
 # Convert the list to a DataFrame
@@ -29,6 +33,7 @@ df = pd.DataFrame(data, columns=columns)
 #print(df)
 
 # Descriptive statistics for numerical columns
+print(df.info())
 print(df.describe())
 
 # Frequency of categories
@@ -92,4 +97,26 @@ sns.scatterplot(x='Time_Since_Last_Scan', y='Price', data=df_numeric)
 plt.title('Scatter Plot of Price vs. Time Since Last Scan')
 plt.xlabel('Time Since Last Scan')
 plt.ylabel('Price')
+plt.show()
+
+categories = np.sort(df['Category'].unique())
+transition_matrix = pd.DataFrame(np.zeros((len(categories), len(categories))), index=categories, columns=categories)
+
+# Populate the transition matrix
+for _, group in df.groupby('Customer_Number'):
+    categories_visited = group['Category'].values
+    for i in range(len(categories_visited) - 1):
+        source = categories_visited[i]
+        target = categories_visited[i + 1]
+        transition_matrix.at[source, target] += 1
+
+# Optional: Normalize the transition matrix by row to convert counts to probabilities
+# transition_matrix = transition_matrix.div(transition_matrix.sum(axis=1), axis=0)
+
+# Plot the heatmap
+plt.figure(figsize=(12, 10))
+sns.heatmap(transition_matrix, annot=True, cmap='viridis', fmt=".0f")
+plt.title('Heatmap of Customer Transitions Between Categories')
+plt.xlabel('Destination Category')
+plt.ylabel('Source Category')
 plt.show()

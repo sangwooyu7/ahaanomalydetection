@@ -14,16 +14,17 @@ Reminder: Code is NOT graded. Put effort into making presentations and reports n
   - Can you identify customer types? (Missing)
   - Describe abnormalities
 
-- If we do ML
-  - Think about features
-  - Experiment with features
-  - Choose the most informative features using dimensionality reduction
-    - PCA
-  - Evaluating model performance only possible in Checker
-  - Make sure about 15% of input is marked sus
-- Beyond ML
-  - Research some other methods
-  - Some critical thinking or academic research needed how to solve this problem
+- Data analysis
+  - If we do ML
+    - Think about features
+    - Experiment with features
+    - Choose the most informative features using dimensionality reduction
+      - PCA
+    - Evaluating model performance only possible in Checker
+    - Make sure about 15% of input is marked sus
+  - Beyond ML
+    - Research some other methods 
+    - Some critical thinking or academic research needed how to solve this problem
 
 # Objective
 We want to identify fraudulent transactions. 

@@ -5,6 +5,7 @@ import math
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
 from sklearn.decomposition import PCA
+from sklearn.preprocessing import RobustScaler
 from scan import Scan
 from receipt import Receipt
 from read import read_receipts
@@ -13,6 +14,7 @@ from associate import preprocess_data
 from associate import compute_association_rules
 from associate import generate_subsets
 from collections import defaultdict
+
 
 def extract_features(receipts, min_confidence=0.5):
     features = []
@@ -32,9 +34,9 @@ def extract_features(receipts, min_confidence=0.5):
 
     for receipt in receipts:
         # Standard time, cost, num scans
-        total_time = math.log(receipt.total_time + 1)  
+        total_time = math.log(receipt.total_time + 1)
         total_cost = math.log(receipt.total_cost + 1)
-        time_cost_ratio = total_cost / total_time if total_time > 0 else 0
+        time_cost_ratio = total_time / total_cost if total_time > 0 else 0
         time_variance = receipt.calculate_time_variance()
         num_scans = len(receipt.scans)
         dept_costs = defaultdict(float)
@@ -69,31 +71,31 @@ def extract_features(receipts, min_confidence=0.5):
         # for rule in rules:
         #    antecedent = set(str(item) for item in rule.ordered_statistics[0].items_base)
         #     consequent = set(str(item) for item in rule.ordered_statistics[0].items_add)
-        #    combo = antecedent.union(consequent)
+        #    combo = antecedent.union(consequent)Q
         #    if combo.issubset(departments) and len(combo) > 1:
         #        unusual_combo = True
         #        break
 
+        features.append([  # total_time,
+            # total_cost,
+            # num_scans,
+            time_variance,
+            # max_spend_dept,
+            # max_scans_dept,
+            dept_change_proportion,
+            back_and_forth,
+            time_cost_ratio,
+            # int(in_top_subsets)
+            # len(unusual_combos)
+        ])
 
-        features.append([# total_time,
-                         # total_cost,
-                         num_scans,
-                         time_variance,
-                         # max_spend_dept,
-                         # max_scans_dept,
-                         dept_change_proportion,
-                         back_and_forth,
-                         time_cost_ratio,
-                         # int(in_top_subsets)
-                         # len(unusual_combos)
-                         ])
-    
     feature_matrix = np.array(features)
-    min_values = np.min(feature_matrix, axis=0)
-    max_values = np.max(feature_matrix, axis=0)
-    normalized_features = (feature_matrix - min_values) / (max_values - min_values)
-
+    # if feature_matrix.size > 0:
+    #     min_values = np.min(feature_matrix, axis=0)
+    #     max_values = np.max(feature_matrix, axis=0)
+    #     normalized_features = (feature_matrix - min_values) / (max_values - min_values)
+    # else:
+    #    normalized_features = feature_matrix
+    scaler = RobustScaler()
+    normalized_features = scaler.fit_transform(feature_matrix)
     return normalized_features
-
-
-

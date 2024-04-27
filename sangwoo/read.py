@@ -15,6 +15,8 @@ def read_receipts(file_path):
                     scan = Scan(int(department), int(time), float(price))
                     receipt.add_scan(scan)
             receipts.append(receipt)
+    num_receipts = len(receipts)
+    print(f"Read in {num_receipts} receipts successfully")
     return receipts
 
 def sample_receipts(receipts, sample_rate=0.1, seed=None):

@@ -1,74 +1,31 @@
-import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans
-from sklearn.metrics import silhouette_score
-from sklearn.decomposition import PCA
-from scan import Scan
-from receipt import Receipt
-from read import read_receipts
-from read import sample_receipts
-from extract import extract_features
-from collections import defaultdict
 
-file_path = 'supermarket.csv'
-receipts = read_receipts(file_path)
-set_seed = 999
-sample = sample_receipts(receipts, 0.05, set_seed)
-features = extract_features(sample)
-X = np.array(features)
+# Assuming sus cluster is smallest (+- 15% because of Checker)
+def identify_sus_cluster(kmeans):
+    cluster_sizes = [np.sum(kmeans.labels_ == i) for i in range(kmeans.n_clusters)]
+    return np.argmin(cluster_sizes)
 
-pca = PCA(n_components=5)  # Choose the number of components
-X_pca = pca.fit_transform(X)
-components = pca.components_
-original_features = ['total_time',
-                     'total_cost',
-                     'num_scans',
-                     'time_variance',
-                     'dept_change_proportion',
-                     'back_and_forth',
-                     'time_cost_ratio',
-                     # 'in_top_subsets'
-                    ]
+def expand_suspicious_cluster(kmeans, X_pca, target_size=150):
+    suspicious_cluster_label = identify_sus_cluster(kmeans)
+    suspicious_cluster_centroid = kmeans.cluster_centers_[suspicious_cluster_label]
 
-for i, component in enumerate(components):
-    print(f"Component {i+1}:")
-    for feature, loading in zip(original_features, component):
-        print(f"{feature}: {loading}")
+    distances = np.linalg.norm(X_pca - suspicious_cluster_centroid, axis=1)
+    non_suspicious_indices = np.where(kmeans.labels_ != suspicious_cluster_label)[0]
+    sorted_indices = non_suspicious_indices[np.argsort(distances[non_suspicious_indices])]
 
-inertias = []
-for k in range(2, 11):
-    kmeans = KMeans(n_clusters=k, random_state=42)
-    kmeans.fit(X_pca)
-    inertias.append(kmeans.inertia_)
+    current_size = np.sum(kmeans.labels_ == suspicious_cluster_label)
+    receipts_to_add = min(target_size - current_size, len(sorted_indices))
 
-plt.plot(range(2, 11), inertias)
-plt.xlabel('Number of Clusters')
-plt.ylabel('Inertia')
-plt.show()
+    new_labels = kmeans.labels_.copy()
+    new_labels[sorted_indices[:receipts_to_add]] = suspicious_cluster_label
 
-optimal_k = 3
+    return new_labels
 
-# Silhouette analysis
-silhouette_scores = []
-for k in range(2, 11):
-    kmeans = KMeans(n_clusters=k, random_state=42)
-    labels = kmeans.fit_predict(X_pca)
-    silhouette_scores.append(silhouette_score(X_pca, labels))
-
-plt.plot(range(2, 11), silhouette_scores)
-plt.xlabel('Number of Clusters')
-plt.ylabel('Silhouette Score')
-plt.show()
-
-kkmeans = KMeans(n_clusters=optimal_k, random_state=42)
-labels = kmeans.fit_predict(X_pca)
-
-# Analyze cluster characteristics
-for i in range(optimal_k):
-    cluster_indices = np.where(labels == i)[0]
-    cluster_features = X[cluster_indices]
-    print(f"Cluster {i + 1}:")
-    print("Size:", len(cluster_indices))
-    print("Mean Features:", np.mean(cluster_features, axis=0))
+def print_cluster_characteristics(X, labels, optimal_k):
+    for i in range(optimal_k):
+        cluster_indices = np.where(labels == i)[0]
+        cluster_features = X[cluster_indices]
+        print(f"Cluster {i + 1}:")
+        print("Size:", len(cluster_indices))
+        print("Mean Features:", np.mean(cluster_features, axis=0))
 

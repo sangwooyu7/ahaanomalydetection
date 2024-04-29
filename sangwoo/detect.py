@@ -9,7 +9,7 @@ from cluster import print_cluster_characteristics
 from cluster import expand_suspicious_cluster
 
 # Read in file as Receipts
-file_path = 'case0.csv'
+file_path = 'case1.csv'
 case0 = read_receipts(file_path)
 
 # Get characteristics of Receipts

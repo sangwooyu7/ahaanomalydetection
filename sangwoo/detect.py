@@ -9,11 +9,11 @@ from cluster import print_cluster_characteristics
 from cluster import expand_suspicious_cluster
 
 # Read in file as Receipts
-file_path = 'case1.csv'
-case0 = read_receipts(file_path)
+file_path = 'case2.csv'
+case = read_receipts(file_path)
 
 # Get characteristics of Receipts
-features = extract_features(case0)
+features = extract_features(case)
 X = np.array(features)
 
 # Features are too many, we consider only the most distinct ones
@@ -22,7 +22,7 @@ X_pca = pca.fit_transform(X)
 
 # Consider N clusters, subject to change
 optimal_k = 3
-kmeans = KMeans(n_clusters=optimal_k, random_state=42)
+kmeans = KMeans(n_clusters=optimal_k, random_state=10)
 kmeans.fit(X_pca)
 labels = kmeans.fit_predict(X_pca)
 
@@ -32,11 +32,12 @@ labels_spot_check = expand_suspicious_cluster(kmeans, X_pca, 150)
 print_cluster_characteristics(X_pca, labels_spot_check, optimal_k)
 
 suspicious_indexes = [i for i, label in enumerate(labels_spot_check) if label == sus_cluster]
+non_suspicious_indexes = [i for i, label in enumerate(labels_spot_check) if label != sus_cluster]
 
 with open('sus.csv', 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
-    for index in suspicious_indexes:
+    for index in non_suspicious_indexes:
         writer.writerow([index])
-        case0[index].sus = True  # Mark the receipt as suspicious
+        case[index].sus = True  # Mark the receipt as suspicious
 
 print(f"{len(suspicious_indexes)} receipts marked as suspicious")

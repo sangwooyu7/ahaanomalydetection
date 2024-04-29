@@ -34,11 +34,16 @@ def extract_features(receipts, min_confidence=0.5):
 
     for receipt in receipts:
         # Standard time, cost, num scans
-        total_time = math.log(receipt.total_time + 1)
-        total_cost = math.log(receipt.total_cost + 1)
-        time_cost_ratio = total_time / total_cost if total_time > 0 else 0
-        time_variance = receipt.calculate_time_variance()
+        log_total_time = math.log(receipt.total_time + 1)
+        total_time = receipt.total_time
+        log_total_cost = math.log(receipt.total_cost + 1)
+        total_cost = receipt.total_cost
         num_scans = len(receipt.scans)
+        time_scans_ratio = num_scans / total_time if total_time > 0 else 0
+        time_cost_ratio = total_time / total_cost if total_cost > 0 else 0
+        cost_scans_ratio = total_cost / num_scans if num_scans > 0 else 0
+        time_variance = receipt.calculate_time_variance()
+
         dept_costs = defaultdict(float)
         dept_scans = defaultdict(int)
 
@@ -62,7 +67,7 @@ def extract_features(receipts, min_confidence=0.5):
         # max_spend_dept = max(dept_costs.items(), key=lambda x: x[1])[0]
         # max_scans_dept = max(dept_scans.items(), key=lambda x: x[1])[0]
 
-        dept_change_proportion = dept_changes / (num_scans - 1) if num_scans > 1 else 0
+        # dept_change_proportion = dept_changes / (num_scans - 1) if num_scans > 1 else 0
         # departments = set(scan.department for scan in receipt.scans)
         # in_top_subsets = any(departments.issuperset(subset) for subset in top_subsets)
 
@@ -77,25 +82,27 @@ def extract_features(receipts, min_confidence=0.5):
         #        break
 
         features.append([  # total_time,
-            # total_cost,
+            log_total_cost,
             # num_scans,
             time_variance,
             # max_spend_dept,
             # max_scans_dept,
-            dept_change_proportion,
-            back_and_forth,
-            time_cost_ratio,
+            dept_changes,
+            time_scans_ratio,
+            cost_scans_ratio
+            # back_and_forth,
+            # time_cost_ratio,
             # int(in_top_subsets)
             # len(unusual_combos)
         ])
 
     feature_matrix = np.array(features)
-    # if feature_matrix.size > 0:
-    #     min_values = np.min(feature_matrix, axis=0)
-    #     max_values = np.max(feature_matrix, axis=0)
-    #     normalized_features = (feature_matrix - min_values) / (max_values - min_values)
-    # else:
-    #    normalized_features = feature_matrix
-    scaler = RobustScaler()
-    normalized_features = scaler.fit_transform(feature_matrix)
+    if feature_matrix.size > 0:
+        min_values = np.min(feature_matrix, axis=0)
+        max_values = np.max(feature_matrix, axis=0)
+        normalized_features = (feature_matrix - min_values) / (max_values - min_values)
+    else:
+        normalized_features = feature_matrix
+    # scaler = RobustScaler()
+    # normalized_features = scaler.fit_transform(feature_matrix)
     return normalized_features

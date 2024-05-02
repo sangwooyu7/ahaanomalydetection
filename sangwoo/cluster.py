@@ -2,8 +2,9 @@ import numpy as np
 
 # Assuming sus cluster is smallest (+- 15% because of Checker)
 def identify_sus_cluster(kmeans):
-    cluster_sizes = [np.sum(kmeans.labels_ == i) for i in range(kmeans.n_clusters)]
-    return np.argmin(cluster_sizes)
+    cluster_sizes = [(np.sum(kmeans.labels_ == i), i) for i in range(kmeans.n_clusters)]
+    cluster_sizes.sort()
+    return cluster_sizes[0][1]
 
 def expand_suspicious_cluster(kmeans, X_pca, target_size=150):
     suspicious_cluster_label = identify_sus_cluster(kmeans)

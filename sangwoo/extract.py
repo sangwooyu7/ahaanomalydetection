@@ -82,14 +82,14 @@ def extract_features(receipts, min_confidence=0.5):
         #        break
 
         features.append([  # total_time,
-            log_total_cost,
+            # log_total_cost,
             # num_scans,
             time_variance,
             # max_spend_dept,
             # max_scans_dept,
             dept_changes,
             time_scans_ratio,
-            cost_scans_ratio
+            cost_scans_ratio,
             # back_and_forth,
             # time_cost_ratio,
             # int(in_top_subsets)

@@ -29,4 +29,13 @@ class Receipt:
     def flag_as_sus(self, reason):
         self.sus = True
         self.reasons.append(reason)
-        
+
+    def get_biggest_spending(self):
+        dept_costs = {}
+        for scan in self.scans:
+            dept_costs[scan.department] = dept_costs.get(scan.department, 0) + scan.price
+        if dept_costs:
+            max_spend_dept = max(dept_costs.items(), key=lambda x: x[1])[0]
+        else:
+            max_spend_dept = None
+        return max_spend_dept

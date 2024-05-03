@@ -10,7 +10,7 @@ from cluster import print_cluster_characteristics
 from cluster import expand_suspicious_cluster
 
 # Read in file as Receipts
-file_path = 'supermarket.csv'
+file_path = 'case13.csv'
 case = read_receipts(file_path)
 
 # Get characteristics of Receipts
@@ -22,7 +22,7 @@ pca = PCA(n_components=2)
 X_pca = pca.fit_transform(X)
 
 # Consider N clusters, subject to change
-optimal_k = 4
+optimal_k = 3
 
 num_runs = 100
 sus_counts = defaultdict(int)
@@ -44,20 +44,20 @@ threshold = num_runs * 0.6  # Adjust this value as needed
 
 suspicious_indexes = [i for i, count in sus_counts.items() if count >= threshold]
 sorted_sus_counts = sorted(sus_counts.items(), key=lambda x: x[1], reverse=True)
-top_sus_indexes = [i for i, count in sorted_sus_counts[:150]]
+top_sus_indexes = [i for i, count in sorted_sus_counts[:100]]
 non_suspicious_indexes = [i for i in range(len(case)) if i in top_sus_indexes]
-
 
 with open('sus.csv', 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
-    for index, count in non_suspicious_indexes:
-        writer.writerow([index, count])
+    for index in top_sus_indexes:
+        writer.writerow([index])
         case[index].sus = True  # Mark the receipt as suspicious
 
-print(f"{len(non_suspicious_indexes)} receipts marked as suspicious")
+
+print(f"{len(top_sus_indexes)} receipts marked as suspicious.")
 
 leading_index, leading_count = sorted_sus_counts[0]
-last_index, last_count = sorted_sus_counts[149]
+last_index, last_count = sorted_sus_counts[100]
 
 print(f"The leading suspicious index {leading_index} was classified as suspicious {leading_count} times.")
 print(f"The last suspicious index {last_index} was classified as suspicious {last_count} times.")

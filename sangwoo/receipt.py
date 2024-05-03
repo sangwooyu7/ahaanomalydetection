@@ -17,6 +17,7 @@ class Receipt:
             scans_data.append([scan.department, scan.time, scan.price])
         return scans_data
 
+
     def calculate_time_variance(self):
         if len(self.scans) < 2:
             return 0  # Variance requires at least two data points
@@ -26,16 +27,20 @@ class Receipt:
         variance = sum((x - mean_interval) ** 2 for x in intervals) / len(intervals)
         return variance
 
-    def flag_as_sus(self, reason):
-        self.sus = True
-        self.reasons.append(reason)
-
-    def get_biggest_spending(self):
+    def biggest_spending_department(self):
         dept_costs = {}
         for scan in self.scans:
             dept_costs[scan.department] = dept_costs.get(scan.department, 0) + scan.price
-        if dept_costs:
-            max_spend_dept = max(dept_costs.items(), key=lambda x: x[1])[0]
-        else:
-            max_spend_dept = None
-        return max_spend_dept
+        return max(dept_costs.items(), key=lambda x: x[1])[0] if dept_costs else None
+
+    def time_scans_ratio(self):
+        return self.total_time / len(self.scans) if self.scans else 0
+
+    def time_cost_ratio(self):
+        return self.total_time / self.total_cost if self.total_cost > 0 else 0
+
+    def cost_scans_ratio(self):
+        return self.total_cost / len(self.scans) if self.total_cost > 0 else 0
+
+    def number_of_scans(self):
+        return len(self.scans)

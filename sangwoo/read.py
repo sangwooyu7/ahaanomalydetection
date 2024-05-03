@@ -8,7 +8,7 @@ def read_receipts(file_path):
     with open(file_path, 'r') as file:
         reader = csv.reader(file, delimiter=',')
         for row in reader:
-            receipt = Receipt()
+            receipt = Receipt()  # Pass the index to the Receipt constructor
             for scan_data in [row.strip().split() for row in row]:
                 if len(scan_data) == 3:
                     department, time, price = scan_data

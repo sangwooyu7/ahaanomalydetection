@@ -40,7 +40,7 @@ def process_and_export_receipts(filepath, output_filepath):
     department_data = df[df['Department'] == 1]
     plt.figure(figsize=(10, 6))
     plt.hist(department_data['Price'], bins=30, color='blue', alpha=0.7)
-    plt.title('Distribution of Prices in Department 14')
+    plt.title('Distribution of Prices in Department 1')
     plt.xlabel('Price')
     plt.ylabel('Frequency')
     plt.grid(True)
@@ -50,8 +50,8 @@ def process_and_export_receipts(filepath, output_filepath):
 
 # Usage
 def main():
-    input_filepath = 'case0.csv'
-    output_filepath = 'case0_straightened_scan.csv'
+    input_filepath = 'supermarket.csv  '
+    output_filepath = 'supermarket_scans_straightened.csv'
     process_and_export_receipts(input_filepath, output_filepath)
 
 

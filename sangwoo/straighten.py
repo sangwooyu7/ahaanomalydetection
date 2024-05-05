@@ -28,7 +28,9 @@ def process_and_export_receipts(filepath, output_filepath):
             'Total Cost': receipt.total_cost,
             'Average Time per Scan': receipt.time_scans_ratio(),
             'Average Price per Scan': receipt.cost_scans_ratio(),
-            'Spent the most in': receipt.biggest_spending_department()
+            'Spent the most in': receipt.biggest_spending_department(),
+            'Spend the 2nd most in': receipt.second_biggest_spending_department(),
+            'Scanned the most in': receipt.most_scanned_department()
         })
     df = pd.DataFrame(data)
     df = df.round(2)
@@ -41,8 +43,8 @@ def process_and_export_receipts(filepath, output_filepath):
 
 # Usage
 def main():
-    input_filepath = 'case0.csv'
-    output_filepath = 'case0_straightened.csv'
+    input_filepath = 'supermarket.csv'
+    output_filepath = 'supermarket_straightened.csv'
     process_and_export_receipts(input_filepath, output_filepath)
 
 

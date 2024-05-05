@@ -19,7 +19,7 @@ def get_top_depts_and_others(spending_by_dept, top_n=5):
     top_depts.append(('Others', others))
     return top_depts
 
-def plot_pie_chart(receipts, top_n=7):
+def plot_pie_chart(receipts, top_n=18):
     spending_by_dept = get_spending_by_dept(receipts)
     top_depts_and_others = get_top_depts_and_others(spending_by_dept, top_n)
     departments = [ dept for dept, spending in top_depts_and_others]

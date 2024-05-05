@@ -27,6 +27,7 @@ def get_sorted_receipt_indexes(receipts, ratio_method, top_n=300):
     sorted_indexes = [receipt[0] for receipt in sorted_receipts]
 
     return sorted_indexes
+
 def find_common_receipt_indexes(receipts, top_n=300):
     # Add indices to receipts
     indexed_receipts = [(i, receipt) for i, receipt in enumerate(receipts)]
@@ -57,14 +58,14 @@ def export_indexes_to_csv(indexes, output_file):
 
 # Usage
 def main():
-    file_path = 'case13.csv'
+    file_path = 'case16.csv'
     receipts = read_receipts(file_path)
-    common_indexes = find_common_receipt_indexes(receipts, top_n=150)
-    export_indexes_to_csv(common_indexes, 'sus_sort.csv')
-    print(f"{len(common_indexes)} receipt indexes written to sus_sort.csv.")
-    # sorted_indexes = get_sorted_receipt_indexes(receipts, 'time_cost_ratio', top_n=150)
-    # export_indexes_to_csv(sorted_indexes, 'sus_sort.csv')
-    # print(f"{len(sorted_indexes)} receipt indexes written to sus_sort.csv.")
+    # common_indexes = find_common_receipt_indexes(receipts, top_n=150)
+    # export_indexes_to_csv(common_indexes, 'sus_sort.csv')
+    # print(f"{len(common_indexes)} receipt indexes written to sus_sort.csv.")
+    sorted_indexes = get_sorted_receipt_indexes(receipts, 'time_cost_ratio', top_n=150)
+    export_indexes_to_csv(sorted_indexes, 'sus_sort.csv')
+    print(f"{len(sorted_indexes)} receipt indexes written to sus_sort.csv.")
 
 
 if __name__ == "__main__":

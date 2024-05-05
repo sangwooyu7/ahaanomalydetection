@@ -10,7 +10,7 @@ from cluster import print_cluster_characteristics
 from cluster import expand_suspicious_cluster
 
 # Read in file as Receipts
-file_path = 'case13.csv'
+file_path = 'case16.csv'
 case = read_receipts(file_path)
 
 # Get characteristics of Receipts
@@ -44,10 +44,10 @@ threshold = num_runs * 0.6  # Adjust this value as needed
 
 suspicious_indexes = [i for i, count in sus_counts.items() if count >= threshold]
 sorted_sus_counts = sorted(sus_counts.items(), key=lambda x: x[1], reverse=True)
-top_sus_indexes = [i for i, count in sorted_sus_counts[:100]]
+top_sus_indexes = [i for i, count in sorted_sus_counts[:150]]
 non_suspicious_indexes = [i for i in range(len(case)) if i in top_sus_indexes]
 
-with open('sus.csv', 'w', newline='') as csvfile:
+with open('sus_kmeans.csv', 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
     for index in top_sus_indexes:
         writer.writerow([index])

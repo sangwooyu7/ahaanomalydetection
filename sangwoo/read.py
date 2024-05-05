@@ -19,6 +19,23 @@ def read_receipts(file_path):
     print(f"Read in {num_receipts} receipts successfully")
     return receipts
 
+def index_receipts(file_path):
+    receipts = []
+    with open(file_path, 'r') as file:
+        reader = csv.reader(file, delimiter=',')
+        for row in reader:
+            receipt = Receipt()
+            for scan_data in [row.strip().split() for row in row]:
+                if len(scan_data) == 3:
+                    department, time, price = scan_data
+                    scan = Scan(int(department), int(time), float(price))
+                    receipt.add_scan(scan)
+            receipts.append(receipt)
+    indexed_receipts = list(enumerate(receipts))
+    num_receipts = len(receipts)
+    print(f"Read in {num_receipts} receipts successfully")
+    return indexed_receipts
+
 def sample_receipts(receipts, sample_rate=0.1, seed=None):
     if seed is not None:
         random.seed(seed)
